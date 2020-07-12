@@ -27,9 +27,11 @@ def poll(request, id = None):
         question = Question.objects.get(id = id)
     except:
         raise Http404
+
+    context = {}
+    context['question'] = question
+
     if request.method == "GET":
-        context = {}
-        context['question'] = question
         return render(request, 'polls/poll.html', context)
 
     if request.method == 'POST':
@@ -40,6 +42,7 @@ def poll(request, id = None):
         ret = Answer.objects.create(user_id = user_id, choice_id = data['choice'])  # data['choice'] because in poll.html
         # we named radio button with choice
         if ret:
-            return HttpResponse("Your vote is registered")
+            #return HttpResponse("Your vote is registered")
+            return render(request, 'polls/details.html', context) 
         else:
             return HttpResponse("Something went Wrong!")

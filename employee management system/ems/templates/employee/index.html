@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- {{title}} is context, provided in views methods-->
+    <a href="/employees/add/">Add Employee</a>
+    <h2>List of {{title}}</h2>
+
+    {% if users %}
+
+        <ul>
+            {% for user in users %}
+            <br>
+                <li>
+                    {{user.first_name}} &nbsp; {{user.last_name}} <br>
+                    <a href="/employees/{{user.id}}/details/">Details</a>
+                    <a href="/employees/{{user.id}}/edit/">Edit</a>
+                    <a href="/employees/{{user.id}}/delete/">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>There is no Employee available</p>
+    {% endif %}
+
+{% endblock content%}
