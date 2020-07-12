@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- {{title}} is context, provided in views methods-->
+
+    {% if question %}
+        <h2>Detail Page</h2>
+        <h3>{{question.title}}</h3>
+        <p>This Poll is created by: {{question.created_by.first_name}}</p>
+    {% endif %}
+
+{% endblock content%}
