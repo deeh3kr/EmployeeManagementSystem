@@ -33,7 +33,7 @@ class Choice(models.Model):
         return self.answer_set.count()
 
 class Answer(models.Model):
-    # e can have OneToOne relation for User, if you want user to choose only one choice
+    # We can have OneToOne relation for User, if you want user to choose only one choice
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add = True)

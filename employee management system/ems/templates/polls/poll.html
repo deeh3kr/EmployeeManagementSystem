@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- {{title}} is context, provided in views methods-->
+
+    {% if question %}
+        <h2>Vote Page</h2>
+        <h3>{{question.title}}</h3>
+
+        <form method="POST" action="/polls/{{question.id}}/">
+        {% csrf_token %}
+
+        <ol>
+            {% for choice in question.choices %}
+                <input type="radio" name="choice" value="{{choice.id}}">
+                <label>{{choice.text}}</label>
+                <br>
+            {% empty %}
+                <p>No Choice is available for this Question</p>
+            {% endfor %}
+        </ol>
+        <button type="submit" value="Vote">Vote</button>
+        </form>
+        <p>This Poll is created by: {{question.created_by.first_name}}</p>
+    {% endif %}
+
+{% endblock content%}
