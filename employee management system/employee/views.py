@@ -2,12 +2,39 @@ from django.shortcuts import render, get_object_or_404
 from employee.models import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.contrib.auth import  authenticate, login, logout
 from django import forms
 from employee.forms import UserForm
 from django.urls import reverse
 from django.http import Http404, HttpResponse
 
 # Create your views here.
+
+def user_login(request):
+    context = {}
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username = username, password = password)
+        if user:
+            login(request, user)
+            return HttpResponseRedirect(reverse('user_success'))
+        else:
+            context['error'] = 'Provide right Credentials'
+            return render(request, 'auth/login.html', context)
+    else:
+        return render(request, 'auth/login.html', context)
+
+def success(request):
+    context = {}
+    user = request.user
+    context['user'] = user
+    return render(request, 'auth/success.html', context)
+
+def user_logout(request):
+    if request.method == 'POST':
+        logout(request)
+        return HttpResponseRedirect(reverse('user_login'))
 
 def employee_list(request):
     context = {}
