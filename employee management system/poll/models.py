@@ -15,6 +15,11 @@ class Question(models.Model):
     def __str__(self):
         return self.title
 
+    #this will return all choices associated with current question object
+    @property
+    def choices(self):
+        return self.choice_set.all()
+
 class Choice(models.Model):
     question = models.ForeignKey('poll.Question', on_delete = models.CASCADE)
     text = models.TextField(null = True, blank = True)
@@ -23,3 +28,16 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.text
+    @property
+    def votes(self):
+        return self.answer_set.count()
+
+class Answer(models.Model):
+    # e can have OneToOne relation for User, if you want user to choose only one choice
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return self.user.first_name + "-" + self.choice.text

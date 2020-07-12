@@ -5,6 +5,15 @@
     {% if question %}
         <h2>Detail Page</h2>
         <h3>{{question.title}}</h3>
+        <ol>
+            {% for choice in question.choices %}
+            
+                <li>{{choice.text}} ({{choice.votes}})</li>
+            
+            {% empty %}
+                <p>No Choice is available for this Question</p>
+            {% endfor %}
+        </ol>
         <p>This Poll is created by: {{question.created_by.first_name}}</p>
     {% endif %}
 
