@@ -8,7 +8,10 @@
         <ul>
             {% for question in questions %}
                 <li>
-                    <a href="/polls/{{question.id}}/details/">{{question.title}}</a>
+                   <!-- <a href="/polls/{{question.id}}/details/">{{question.title}}</a> -->
+                    <!-- <a href="/polls/{{question.id}}/">{{question.title}}</a> -->
+                    <!--This below link is for dynamic url. it will search this single_poll in all urls.py file-->
+                    <a href="{% url 'single_poll' question.id %}">{{question.title}}</a>
                 </li>
             {% endfor %}
         </ul>

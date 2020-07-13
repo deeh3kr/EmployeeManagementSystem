@@ -44,8 +44,12 @@ def employee_list(request):
 
 def employee_details(request, id = None):
     context = {}
-    context['user'] = get_object_or_404(User, id = id)
-    return render(request, 'employee/details.html', context)
+    u = get_object_or_404(User, id = id)
+    if u:
+        context['user'] = u
+        return render(request, 'employee/details.html', context)
+    else:
+        return HttpResponse("Something went Wrong!")
 
 def employee_add(request):
     if request.method == 'POST':
