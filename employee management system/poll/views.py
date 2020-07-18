@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from poll.models import *
 from django.http import Http404, HttpResponse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required(login_url="/login/")
 def index(request):
     #context is list of variables to be passed to html pages
     questions = Question.objects.all()
@@ -12,6 +14,7 @@ def index(request):
     context['questions'] = questions
     return render(request, 'polls/index.html', context)
 
+@login_required(login_url="/login/")
 def details(request, id = None):
     #context is list of variables to be passed to html pages
     try:
@@ -22,6 +25,7 @@ def details(request, id = None):
     context['question'] = question
     return render(request, 'polls/details.html', context)
 
+@login_required(login_url="/login/")
 def poll(request, id = None):
     try:
         question = Question.objects.get(id = id)

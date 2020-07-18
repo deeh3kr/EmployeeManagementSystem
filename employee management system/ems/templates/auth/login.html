@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+
 <!-- {% load static %} -->
 
 <!-- <html>
@@ -9,7 +9,14 @@
     </head>
     <body> -->
 
-{% block content %}
+{% load static %}
+<html>
+    <head>
+        <title>Employee Management System</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    </head>
+    <body>
         <form method="POST">
             {% csrf_token %}
             <table>
@@ -27,6 +34,5 @@
             </table>
             <button type="submit">Login</button>
         </form>
-{% endblock content %}
-    <!-- </body>
-</html> -->
+     </body>
+</html> 
