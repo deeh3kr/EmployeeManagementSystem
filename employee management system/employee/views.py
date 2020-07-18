@@ -8,6 +8,7 @@ from django import forms
 from employee.forms import UserForm
 from django.urls import reverse
 from django.http import Http404, HttpResponse
+from ems.decorators import role_required
 
 # Create your views here.
 
@@ -43,6 +44,9 @@ def user_logout(request):
 
 @login_required(login_url="/login/")
 def employee_list(request):
+    # groups = request.user.groups.all()
+    # this request.role is coming from middelwares
+    print (request.role)
     context = {}
     context['users'] = User.objects.all()
     context['title'] = "Employees"
@@ -59,7 +63,9 @@ def employee_details(request, id = None):
         return HttpResponse("Something went Wrong!")
 
 @login_required(login_url="/login/")
+@role_required(allowed_roles = ["Admin"])
 def employee_add(request):
+    context = {}
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():

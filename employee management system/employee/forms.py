@@ -1,10 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget = forms.PasswordInput)
-
+    role = forms.ModelChoiceField(queryset = Group.objects.all())
     class Meta:
         model = User
         fields = [
@@ -19,6 +19,26 @@ class UserForm(forms.ModelForm):
             'password' : 'Password'
         }
 
+    def __init__(self, *args, **kwargs):
+        #below if loop will work if we are trying to edit the form. Because in that case we 
+        # would have instance 
+        if kwargs.get('instance'):
+            # We get the 'initial' keyword argument or initialize it
+            # as a dict if it didn't exist.                
+            initial = kwargs.setdefault('initial', {})
+            # The widget for a ModelMultipleChoiceField expects
+            # a list of primary key for the selected data.
+
+            #we are assigning role here by code because all informations except it,
+            # were already there in form which we are editing.
+
+            if kwargs['instance'].groups.all():
+                initial['role'] = kwargs['instance'].groups.all()[0]
+            else:
+                initial['role'] = None
+
+        forms.ModelForm.__init__(self, *args, **kwargs)
+
         #---------Validating Email ID--------------
 
         # def clean_email(self):
@@ -29,7 +49,9 @@ class UserForm(forms.ModelForm):
 
     def save(self):
         password = self.cleaned_data.pop('password')
+        role = self.cleaned_data.pop('role')
         u = super().save()
+        u.groups.set([role])
         u.set_password(password)
         u.save()
         return u
