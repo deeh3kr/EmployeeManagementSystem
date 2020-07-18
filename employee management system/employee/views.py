@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from employee.models import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import  authenticate, login, logout
 from django import forms
 from employee.forms import UserForm
@@ -18,13 +19,17 @@ def user_login(request):
         user = authenticate(request, username = username, password = password)
         if user:
             login(request, user)
-            return HttpResponseRedirect(reverse('user_success'))
+            if request.GET.get('next', None):
+                return HttpResponseRedirect(request.GET['next'])
+            return HttpResponseRedirect(reverse('employee_list'))
+
         else:
             context['error'] = 'Provide right Credentials'
             return render(request, 'auth/login.html', context)
     else:
         return render(request, 'auth/login.html', context)
 
+@login_required(login_url="/login/")
 def success(request):
     context = {}
     user = request.user
@@ -36,12 +41,14 @@ def user_logout(request):
         logout(request)
         return HttpResponseRedirect(reverse('user_login'))
 
+@login_required(login_url="/login/")
 def employee_list(request):
     context = {}
     context['users'] = User.objects.all()
     context['title'] = "Employees"
     return render(request, 'employee/index.html', context)
 
+@login_required(login_url="/login/")
 def employee_details(request, id = None):
     context = {}
     u = get_object_or_404(User, id = id)
@@ -51,6 +58,7 @@ def employee_details(request, id = None):
     else:
         return HttpResponse("Something went Wrong!")
 
+@login_required(login_url="/login/")
 def employee_add(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -65,6 +73,7 @@ def employee_add(request):
         user_form = UserForm()
         return render(request, 'employee/add.html', {"user_form" : user_form})
 
+@login_required(login_url="/login/")
 def employee_edit(request, id = None):
     user = get_object_or_404(User, id = id)
     if request.method == 'POST':
@@ -79,6 +88,7 @@ def employee_edit(request, id = None):
         user_form = UserForm(instance = user)
         return render(request, "employee/edit.html", {'user_form': user_form})
 
+@login_required(login_url="/login/")
 def employee_delete(request, id = None):
     user = get_object_or_404(User, id = id)
     if request.method == 'POST':
