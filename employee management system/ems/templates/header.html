@@ -1,3 +1,4 @@
+{% load poll_extras %}
 <div class="navbar navbar-expand-lg navbar-light bg-light">
     <span class="navbar-brand mb-0 h1">EMS</span>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,7 +15,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'polls_list' %}">
                     <!-- <a class="nav-link" href="/polls/"> -->
-                    {{"Polls" | capfirst}} 
+                    {{"Polls" | upper}} 
                     <!-- <span class="badge badge-primary badge-pill ">3</span> 
                     polls_count is coming from poll.context_processors -->
                     <span class="badge badge-primary badge-pill ">{{ polls_count }}</span> 
@@ -25,7 +26,7 @@
     <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'user_logout' %}">
         {% csrf_token %}
        
-        <a href="#">
+        <a href="{% url 'my_profile' %}">
             <span class="mr-sm-2">{{request.user.first_name}}</span>
         </a>
         <input type="submit" class="btn btn-outline-danger my-2 my-sm-0" value="Logout">

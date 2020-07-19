@@ -6,9 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import  authenticate, login, logout
 from django import forms
 from employee.forms import UserForm
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import Http404, HttpResponse
 from ems.decorators import role_required
+from django.views.generic import DetailView
+from django.views.generic.edit import UpdateView
 
 # Create your views here.
 
@@ -104,3 +106,19 @@ def employee_delete(request, id = None):
         context = {}
         context['user'] = user
         return render(request, 'employee/delete.html', context)
+
+
+class ProfileUpdate(UpdateView):
+    #two fields are allowed to be updated in profile
+    fields = ['designation', 'salary']
+    template_name = 'auth/profile_update.html'
+    success_url = reverse_lazy('my_profile')
+
+    def get_object(self):
+        return self.request.user.profile 
+
+
+class MyProfile(DetailView):
+    template_name = 'auth/profile.html'
+    def get_object(self):
+        return self.request.user.profile 

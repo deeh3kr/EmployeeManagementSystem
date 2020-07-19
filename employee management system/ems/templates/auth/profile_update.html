@@ -6,6 +6,8 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <table class="table table-bordered table-light">
+            <!-- it's changed from user_form to form
+            user_form is used in edit.html -->
             {{form.as_table}}
         </table>
         <br>
