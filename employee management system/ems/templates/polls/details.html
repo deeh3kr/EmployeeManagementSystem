@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+
+
 {% block content %}
-    <!-- {{title}} is context, provided in views methods-->
-
-    {% if question %}
-        <h2>Detail Page</h2>
+    <p>
         <h3>{{question.title}}</h3>
-        <ol>
-            {% for choice in question.choices %}
-            
-                <li>{{choice.text}} ({{choice.votes}})</li>
-            
-            {% empty %}
-                <p>No Choice is available for this Question</p>
-            {% endfor %}
-        </ol>
-        <p>This Poll is created by: {{question.created_by.first_name}}</p>
-    {% endif %}
-
-{% endblock content%}
+    </p>
+    <div class="list-group col-md-6">
+    {% for choice in question.choices %}
+        <a class="list-group-item" href="{% url 'poll_vote' question.id %}">
+            <span class="badge badge-pill badge-primary float-right">{{choice.votes}}</span>
+            {{choice.text}}
+        </a>
+        <!-- <p> ({{choice.votes}})</p> -->
+        {% empty %}
+        <div class="list-group-item">There is no chice available for this question.</div>
+        {% endfor %}
+    </div>
+    <br>
+    <div class="col-md-12"><b>Created by: </b> {{question.created_by.first_name}}</div>
+{% endblock content %}

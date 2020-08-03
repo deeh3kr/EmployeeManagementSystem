@@ -1,23 +1,37 @@
 {% extends 'base.html' %}
+
+
 {% block content %}
-    <!-- {{title}} is context, provided in views methods-->
-    <h2>List of {{title}}</h2>
+    <p>
+        <h3>List of {{title}}</h3>
+    </p>
 
-    {% if questions %}
-
-        <ul>
-            {% for question in questions %}
-                <li>
-                   <!-- <a href="/polls/{{question.id}}/details/">{{question.title}}</a> -->
-                    <!-- <a href="/polls/{{question.id}}/">{{question.title}}</a> -->
-                    <!--This below link is for dynamic url. it will search this single_poll in all urls.py file-->
-                    <a href="{% url 'single_poll' question.id %}">{{question.title}}</a>
-                </li>
-            {% endfor %}
-        </ul>
-
-    {% else %}
-        <p>There is no question available</p>
-    {% endif %}
-
-{% endblock content%}
+    <div class="table-responsive-sm">
+        {% if questions %}
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Poll</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for question in questions %}
+                    <tr>
+                        <th scope="row">
+                            {{question.title}}
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-primary" href="{%  url 'poll_details' question.id %}">Details</a>
+                            <a class="btn btn-warning" href="{%  url 'poll_edit' question.id %}">Edit</a>
+                            <a class="btn btn-danger" href="{%  url 'poll_delete' question.id %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+        {% else %}
+            <p>There is no question available.</p>
+        {% endif %}
+    </div>
+{% endblock content %}
