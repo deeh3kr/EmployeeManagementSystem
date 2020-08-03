@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 from employee.views import ( #index, 
 user_login, user_logout, success,
@@ -31,4 +33,6 @@ urlpatterns = [
     path('logout/', user_logout, name = 'user_logout'),
     path('profile/', MyProfile.as_view(), name = 'my_profile'),
     path('profile/update/', ProfileUpdate.as_view(), name = 'update_profile'),
-]
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
+# + appended for media urls
