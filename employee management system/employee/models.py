@@ -18,6 +18,23 @@ class Profile(models.Model):
     def __str__(self):
         return "{0} {1}".format(self.user.first_name, self.user.last_name)
 
+class EmployeeManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(profile__designation='Employee')
+
+#proxy model
+# you can't add fields in this model
+#we can use all user model properties through employee class
+class Employee(User):
+    class Meta:
+        ordering = ('username', )
+        proxy = True
+
+    objects = EmployeeManager()
+
+    def full_name(self):
+        return self.first_name + " - " + self.last_name
+
 
 #if a new user is created, then new profile will automatically be created
 # it is called signal receiver system
